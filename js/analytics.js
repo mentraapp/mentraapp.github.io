@@ -4,10 +4,34 @@ const GA_MEASUREMENT_ID = 'G-NTHF4B9JY3'; // TODO: Replace with your actual GA4 
 
 // Initialize Google Analytics
 function initializeGA() {
+    // Check if we should wait for cookie consent
+    if (typeof _iub !== 'undefined' && _iub.csConfiguration) {
+        // Wait for Iubenda consent before initializing GA
+        _iub.csConfiguration.callback = _iub.csConfiguration.callback || {};
+        _iub.csConfiguration.callback.onConsentGiven = function() {
+            loadGoogleAnalytics();
+        };
+        
+        // Check if consent already given - with safe property access
+        try {
+            if (_iub.cs && _iub.cs.api && typeof _iub.cs.api.isConsentGiven === 'function' && _iub.cs.api.isConsentGiven()) {
+                loadGoogleAnalytics();
+            }
+        } catch (e) {
+            // Iubenda not fully loaded yet, callback will handle initialization
+        }
+    } else {
+        // No cookie consent system detected, load GA directly
+        loadGoogleAnalytics();
+    }
+}
+
+function loadGoogleAnalytics() {
     // Load gtag script dynamically
     const script = document.createElement('script');
     script.async = true;
     script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`;
+    script.className = '_iub_cs_activate'; // Iubenda class for auto-blocking
     document.head.appendChild(script);
     
     // Initialize gtag
@@ -19,13 +43,14 @@ function initializeGA() {
     gtag('config', GA_MEASUREMENT_ID, {
         // Enhanced measurement for automatic tracking
         enhanced_measurement: true,
+        // Anonymize IP addresses for privacy
+        anonymize_ip: true,
         // Track user language
         custom_parameter: {
             user_language: navigator.language || navigator.userLanguage || 'unknown'
         }
     });
     
-    console.log('Google Analytics initialized');
 }
 
 // Track install button clicks
@@ -39,7 +64,6 @@ function trackInstallClick(platform, url) {
             user_language: navigator.language || navigator.userLanguage || 'unknown'
         });
         
-        console.log(`Tracked ${platform} install click`);
     }
 }
 
@@ -51,7 +75,6 @@ function trackCustomEvent(eventName, eventParameters = {}) {
             user_language: navigator.language || navigator.userLanguage || 'unknown'
         });
         
-        console.log(`Tracked custom event: ${eventName}`, eventParameters);
     }
 }
 
@@ -77,8 +100,6 @@ function trackCarouselInteraction(action, slideNumber) {
             slide_number: slideNumber,
             user_language: navigator.language || navigator.userLanguage || 'unknown'
         });
-        
-        console.log(`Tracked carousel ${action} on slide ${slideNumber}`);
     }
 }
 
@@ -92,7 +113,6 @@ function trackSocialClick(platform, url) {
             user_language: navigator.language || navigator.userLanguage || 'unknown'
         });
         
-        console.log(`Tracked ${platform} social click`);
     }
 }
 
@@ -132,14 +152,21 @@ function setupInstallButtonTracking() {
         });
     }
     
-    // iOS install button (when available)
-    const iosButton = document.querySelector('a[href*="apps.apple.com"]') || 
-                     document.querySelector('a:contains("iOS")') ||
-                     document.querySelector('.cta-button[style*="opacity: 0.6"]'); // Coming soon button
+    // iOS install button (when available) - find by text content
+    const ctaButtons = document.querySelectorAll('.cta-button');
+    let iosButton = null;
+    
+    ctaButtons.forEach(button => {
+        if (button.href && button.href.includes('apps.apple.com')) {
+            iosButton = button;
+        } else if (button.textContent.includes('iOS') || button.textContent.includes('Coming Soon')) {
+            iosButton = button;
+        }
+    });
     
     if (iosButton) {
         iosButton.addEventListener('click', () => {
-            if (iosButton.href.includes('apps.apple.com')) {
+            if (iosButton.href && iosButton.href.includes('apps.apple.com')) {
                 trackInstallClick('iOS', iosButton.href);
             } else {
                 // Track "Coming Soon" clicks
