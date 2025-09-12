@@ -147,9 +147,17 @@ class Carousel {
                 if (this.distX > 0) {
                     // Swipe right - go to previous slide
                     this.prevSlide();
+                    // Track swipe interaction
+                    if (window.MenGaugeAnalytics) {
+                        window.MenGaugeAnalytics.trackCarouselInteraction('swipe_right', this.currentSlide + 1);
+                    }
                 } else {
                     // Swipe left - go to next slide
                     this.nextSlide();
+                    // Track swipe interaction
+                    if (window.MenGaugeAnalytics) {
+                        window.MenGaugeAnalytics.trackCarouselInteraction('swipe_left', this.currentSlide + 1);
+                    }
                 }
             }
         }
@@ -162,16 +170,31 @@ class Carousel {
     nextSlide() {
         this.currentSlide = (this.currentSlide + 1) % this.totalSlides;
         this.updateCarousel();
+        
+        // Track carousel interaction
+        if (window.MenGaugeAnalytics) {
+            window.MenGaugeAnalytics.trackCarouselInteraction('next_slide', this.currentSlide + 1);
+        }
     }
     
     prevSlide() {
         this.currentSlide = (this.currentSlide - 1 + this.totalSlides) % this.totalSlides;
         this.updateCarousel();
+        
+        // Track carousel interaction
+        if (window.MenGaugeAnalytics) {
+            window.MenGaugeAnalytics.trackCarouselInteraction('previous_slide', this.currentSlide + 1);
+        }
     }
     
     goToSlide(slideIndex) {
         this.currentSlide = slideIndex;
         this.updateCarousel();
+        
+        // Track carousel interaction
+        if (window.MenGaugeAnalytics) {
+            window.MenGaugeAnalytics.trackCarouselInteraction('goto_slide', slideIndex + 1);
+        }
     }
     
     updateCarousel() {
