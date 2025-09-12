@@ -1,0 +1,119 @@
+.screenshots-section {
+    background: white;
+    padding: 4rem 2rem;
+    text-align: center;
+}
+
+.screenshots-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.carousel-container {
+    position: relative;
+    max-width: 800px;
+    margin: 3rem auto;
+    overflow: hidden;
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    cursor: grab;
+}
+
+.carousel-container:active {
+    cursor: grabbing;
+}
+
+.carousel-track {
+    display: flex;
+    transition: transform 0.3s ease-in-out;
+}
+
+.carousel-slide {
+    min-width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #f8f9fa;
+    padding: 2rem;
+}
+
+.screenshot {
+    max-height: 600px;
+    max-width: 100%;
+    width: auto;
+    height: auto;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.carousel-nav {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.nav-button {
+    background: #667eea;
+    color: white;
+    border: none;
+    border-radius: 50px;
+    padding: 1rem 2rem;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+}
+
+.nav-button:hover {
+    background: #764ba2;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.nav-button:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.carousel-indicators {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #ddd;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.indicator.active {
+    background: #667eea;
+}
+
+@media (max-width: 768px) {
+    .carousel-container {
+        max-width: 90%;
+        margin: 2rem auto;
+    }
+    
+    .carousel-slide {
+        padding: 1rem;
+    }
+    
+    .screenshot {
+        max-height: 400px;
+    }
+    
+    .nav-button {
+        padding: 0.8rem 1.5rem;
+        font-size: 0.9rem;
+    }
+}
