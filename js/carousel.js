@@ -34,29 +34,6 @@ class Carousel {
         // Add swipe/touch event listeners
         this.addSwipeListeners();
         
-        // Auto-advance carousel every 5 seconds
-        this.autoAdvance = setInterval(() => this.nextSlide(), 5000);
-        
-        // Pause auto-advance on hover/touch
-        this.track.parentElement.addEventListener('mouseenter', () => {
-            clearInterval(this.autoAdvance);
-        });
-        
-        this.track.parentElement.addEventListener('touchstart', () => {
-            clearInterval(this.autoAdvance);
-        });
-        
-        // Resume auto-advance when mouse leaves or touch ends
-        this.track.parentElement.addEventListener('mouseleave', () => {
-            this.autoAdvance = setInterval(() => this.nextSlide(), 5000);
-        });
-        
-        this.track.parentElement.addEventListener('touchend', () => {
-            setTimeout(() => {
-                this.autoAdvance = setInterval(() => this.nextSlide(), 5000);
-            }, 1000);
-        });
-        
         this.updateCarousel();
     }
     
