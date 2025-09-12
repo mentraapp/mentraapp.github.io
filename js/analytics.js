@@ -152,31 +152,20 @@ function setupInstallButtonTracking() {
         });
     }
     
-    // iOS install button (when available) - find by text content
-    const ctaButtons = document.querySelectorAll('.cta-button');
-    let iosButton = null;
-    
-    ctaButtons.forEach(button => {
-        if (button.href && button.href.includes('apps.apple.com')) {
-            iosButton = button;
-        } else if (button.textContent.includes('iOS') || button.textContent.includes('Coming Soon')) {
-            iosButton = button;
-        }
-    });
-    
-    if (iosButton) {
-        iosButton.addEventListener('click', () => {
-            if (iosButton.href && iosButton.href.includes('apps.apple.com')) {
-                trackInstallClick('iOS', iosButton.href);
-            } else {
-                // Track "Coming Soon" clicks
+    // iOS "Coming Soon" badge clicks
+    const iosImages = document.querySelectorAll('img[src*="App_Store_Badge"]');
+    iosImages.forEach((img) => {
+        const parent = img.closest('span') || img.closest('a');
+        if (parent) {
+            parent.addEventListener('click', (e) => {
+                e.preventDefault(); // Prevent navigation for disabled button
                 trackCustomEvent('ios_coming_soon_click', {
                     event_category: 'App Downloads',
                     event_label: 'iOS Coming Soon'
                 });
-            }
-        });
-    }
+            });
+        }
+    });
 }
 
 // Set up tracking for social media links

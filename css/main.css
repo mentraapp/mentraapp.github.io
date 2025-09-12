@@ -16,6 +16,34 @@ html {
     scroll-behavior: smooth;
 }
 
+.hero-logo {
+    height: 80px;
+    width: auto;
+    margin-bottom: 1rem;
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+}
+
+.store-badge {
+    height: 60px;
+    width: auto;
+    transition: transform 0.2s ease;
+    margin: 0.5rem;
+}
+
+.store-badge:hover {
+    transform: scale(1.05);
+}
+
+.store-badge.disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    filter: grayscale(0.8);
+}
+
+.store-badge.disabled:hover {
+    transform: none;
+}
+
 .hero {
     text-align: center;
     padding: 4rem 2rem;
@@ -249,6 +277,14 @@ h2 {
 }
 
 @media (max-width: 768px) {
+    .hero-logo {
+        height: 60px;
+    }
+    
+    .store-badge {
+        height: 50px;
+    }
+    
     .hero {
         padding: 3rem 1rem;
     }
@@ -280,8 +316,16 @@ h2 {
 }
 
 @media (max-width: 480px) {
+    .hero-logo {
+        height: 50px;
+    }
+    
     .hero h1 {
         font-size: 2rem;
+    }
+    
+    .store-badge {
+        height: 45px;
     }
     
     .cta-button {
